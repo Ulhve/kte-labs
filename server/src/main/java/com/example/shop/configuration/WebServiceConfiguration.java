@@ -46,7 +46,7 @@ public class WebServiceConfiguration {
     @Bean
     public Endpoint saleSoapEndpoint() {
         EndpointImpl endpoint = new EndpointImpl(bus, saleWebService);
-        endpoint.publish("/ProdSaleSoapService");
+        endpoint.publish("/SaleSoapService");
         return endpoint;
     }
 }
