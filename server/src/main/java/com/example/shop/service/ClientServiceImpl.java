@@ -25,17 +25,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findClientById(long clientId) {
+    public ClientDTO findClientById(long clientId) {
         return clientRepository.findById(clientId)
+                .map(client -> mapper.map(client, ClientDTO.class))
                 .orElseThrow(() -> new ClientNotFoundException(clientId));
     }
 
     @Override
-    public Client updateClientDiscounts(Client client, Integer firstDiscount, Integer secondDiscount) {
+    public ClientDTO updateClientDiscounts(ClientDTO clientDTO, Integer firstDiscount, Integer secondDiscount) {
+        Client client = mapper.map(clientDTO, Client.class);
         client.setDiscount1(firstDiscount);
         client.setDiscount2(secondDiscount);
         clientRepository.saveAndFlush(client);
-        return client;
+        return mapper.map(client, ClientDTO.class);
     }
 }
 

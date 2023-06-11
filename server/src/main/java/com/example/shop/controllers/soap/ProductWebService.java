@@ -32,7 +32,7 @@ public interface ProductWebService {
     @RequestWrapper(localName="setRating", targetNamespace="http://service.ws.rateProduct/")
     @ResponseWrapper(localName="Response", targetNamespace="http://service.ws.rateProduct/")
     @WebMethod
-   RatingDTO rateProduct(@XmlElement(required=true) @WebParam(name="product_id") Long productId,
+    RatingDTO rateProduct(@XmlElement(required=true) @WebParam(name="product_id") Long productId,
                                  @XmlElement(required=true) @WebParam(name="rating_DTO") RatingDTO ratingDTO);
 
 }

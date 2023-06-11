@@ -1,5 +1,6 @@
 package com.example.shop.service;
 
+import com.example.shop.dao.entity.Client;
 import com.example.shop.dao.entity.Product;
 import com.example.shop.dao.entity.Rating;
 import com.example.shop.dao.repository.OrderRepository;
@@ -80,15 +81,15 @@ public class RatingServiceImpl implements RatingService{
             ratingRepository.deleteByClientIdAndProductId(clientId, productId);
         } else {
             Rating r = ratingRepository.findByClientIdAndProductId(clientId, productId)
-                    .map(rElem -> {
-                        rElem.setRating(ratingValue);
-                        return rElem;
-                    })
-                    .orElseGet(() -> {
-                        Product product = productRepository.findById(productId)
-                                .orElseThrow(() -> new ProductNotFoundException(productId));
-                        return new Rating(ratingValue, product, clientService.findClientById(clientId));
-                    });
+                .map(rElem -> {
+                    rElem.setRating(ratingValue);
+                    return rElem;
+                })
+                .orElseGet(() -> {
+                    Product product = productRepository.findById(productId)
+                        .orElseThrow(() -> new ProductNotFoundException(productId));
+                    return new Rating(ratingValue, product, mapper.map(clientService.findClientById(clientId), Client.class));
+                });
             ratingRepository.save(r);
             ratingDTO = mapper.map(r, RatingDTO.class);
         }

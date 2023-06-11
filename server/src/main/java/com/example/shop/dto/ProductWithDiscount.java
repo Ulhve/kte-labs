@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProductWithDiscount {
+
     private Long productId;
     private Integer percentDiscount;
+
 }

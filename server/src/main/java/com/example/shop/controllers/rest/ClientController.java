@@ -2,10 +2,8 @@ package com.example.shop.controllers.rest;
 
 import com.example.shop.controllers.ClientAPI;
 import com.example.shop.dto.ClientDiscounts;
-import com.example.shop.dao.entity.Client;
 import com.example.shop.dto.ClientDTO;
 import com.example.shop.service.ClientService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +24,14 @@ public class ClientController implements ClientAPI {
 
     @PutMapping("/{clientId}/discounts")
     @Override
-    public Client changeDiscounts(
+    public ClientDTO changeDiscounts(
             @PathVariable Long clientId,
-            @Valid @RequestBody ClientDiscounts discounts) {
-        Client client = clientService.findClientById(clientId);
-        clientService.updateClientDiscounts(client, discounts.getDiscount1(), discounts.getDiscount2());
+            @RequestBody ClientDiscounts discounts) {
+        ClientDTO client = clientService.updateClientDiscounts(
+                clientService.findClientById(clientId)
+                , discounts.getDiscount1()
+                , discounts.getDiscount2()
+        );
         return client;
     }
 }

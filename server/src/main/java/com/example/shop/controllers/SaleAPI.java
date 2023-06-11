@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface SaleAPI {
     Long calculate(Long clientId, List<ProductWithCount> products);
-    Statistics statistics(@Valid @RequestBody ClientWithProduct request);
+    Statistics statistics(ClientWithProduct request);
     String order(Long clientId, SaleRequest request);
 }

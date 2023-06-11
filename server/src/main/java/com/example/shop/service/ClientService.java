@@ -1,12 +1,14 @@
 package com.example.shop.service;
 
-import com.example.shop.dao.entity.Client;
 import com.example.shop.dto.ClientDTO;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
+@Validated
 public interface ClientService {
     List<ClientDTO> getAllClients();
-    Client findClientById(long clientId);
-    Client updateClientDiscounts(Client client, Integer firstDiscount, Integer secondDiscount);
+    ClientDTO findClientById(long clientId);
+    ClientDTO updateClientDiscounts(@Valid ClientDTO clientDTO, Integer firstDiscount, Integer secondDiscount);
 }

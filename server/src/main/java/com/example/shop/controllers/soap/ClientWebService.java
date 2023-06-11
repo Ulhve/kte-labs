@@ -1,6 +1,5 @@
 package com.example.shop.controllers.soap;
 
-import com.example.shop.dao.entity.Client;
 import com.example.shop.dto.ClientDTO;
 import com.example.shop.dto.ClientDiscounts;
 import jakarta.jws.WebMethod;
@@ -26,7 +25,7 @@ public interface ClientWebService {
     @RequestWrapper(localName="changeDiscount", targetNamespace="http://service.ws.changeDiscount/")
     @ResponseWrapper(localName="Response", targetNamespace="http://service.ws.changeDiscount/")
     @WebMethod
-    public Client changeDiscounts(@XmlElement(required = true) @WebParam(name = "id") Long clientId,
+    public ClientDTO changeDiscounts(@XmlElement(required = true) @WebParam(name = "id") Long clientId,
                                   @XmlElement(required = true) @WebParam(name = "discounts") ClientDiscounts discounts);
 
 }

@@ -3,17 +3,13 @@ package com.example.shop.service;
 import com.example.shop.dao.entity.*;
 import com.example.shop.dao.repository.OrderRepository;
 import com.example.shop.dao.repository.ProductDiscountRepository;
-import com.example.shop.dto.ClientWithProduct;
-import com.example.shop.dto.ProductWithCount;
-import com.example.shop.dto.ProductWithDiscount;
-import com.example.shop.dto.Statistics;
+import com.example.shop.dto.*;
 import com.example.shop.exception.IncorrectFinalPriceException;
 import com.example.shop.schedule.CheckGenerator;
 import com.example.shop.schedule.DiscountingProductEvent;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.dozer.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -43,7 +39,7 @@ public class SaleServiceImpl implements SaleService {
 
     private ProductWithDiscount currentDiscounting;
 
-    //@PostConstruct
+    @PostConstruct
     public void init() {
         ProductWithDiscount productDiscount = productDiscountRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))
                 .stream().findFirst()
@@ -59,7 +55,7 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public Long calculateFinalPrice(long clientId, List<ProductWithCount> sales) {
-        Client client = clientService.findClientById(clientId);
+        ClientDTO client = clientService.findClientById(clientId);
         return calculateProductsCostInKopecks(client, sales);
     }
 
@@ -74,7 +70,7 @@ public class SaleServiceImpl implements SaleService {
                 .toList();
 
         String checkNumber = checkGenerator.nextCheck();
-        Order order = new Order(clientService.findClientById(clientId), LocalDateTime.now(), checkNumber);
+        Order order = new Order(mapper.map(clientService.findClientById(clientId), Client.class), LocalDateTime.now(), checkNumber);
         order.setPositions(positions);
         orderRepository.save(order);
         return checkNumber;
@@ -90,7 +86,7 @@ public class SaleServiceImpl implements SaleService {
         return orderRepository.getProductStatistics(request.getProductId());
     }
 
-    private Long calculateProductsCostInKopecks(Client client, List<ProductWithCount> sales) {
+    private Long calculateProductsCostInKopecks(ClientDTO client, List<ProductWithCount> sales) {
         List<BigDecimal> calculation = new ArrayList<>();
         for (ProductWithCount productWithCount : sales) {
             int clientDiscount = (productWithCount.getCount() >= MIN_PRODUCTS_FOR_DISCOUNT_2 && client.getDiscount2() > 0)

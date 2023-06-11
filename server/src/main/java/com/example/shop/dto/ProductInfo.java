@@ -13,11 +13,8 @@ import java.util.List;
 public class ProductInfo {
 
     private String title;
-
     private BigDecimal averageRating;
-
     private List<RatingWithCount> ratings;
-
     private Integer currentClientRating;
 
 }
